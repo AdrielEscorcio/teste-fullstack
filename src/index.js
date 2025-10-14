@@ -1,6 +1,10 @@
 const http = require('http')
 
-const server = http.createServer()
+const receberRequisicao = (req, res) => {
+    
+}
 
-PORTA = 3001
+const server = http.createServer(receberRequisicao)
+
+const PORTA = 3001
 server.listen(PORTA, () => console.log(`Servidor rodando na porta ${PORTA}`))
