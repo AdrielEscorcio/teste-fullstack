@@ -1,0 +1,20 @@
+{
+  "name": "teste-full-stack",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AdrielEscorcio/teste-fullstack.git"
+  },
+  "author": "Adriel Escorcio",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AdrielEscorcio/teste-fullstack/issues"
+  },
+  "homepage": "https://github.com/AdrielEscorcio/teste-fullstack#readme",
+  "description": ""
+}
