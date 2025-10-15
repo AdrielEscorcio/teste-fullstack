@@ -1,7 +1,10 @@
 const http = require('http')
-
+const colaborador = require('./routes/colaboradorRouter')
 const receberRequisicao = (req, res) => {
-    
+
+    if(req.url.startsWith('/colaboradores')){
+        return colaborador(req, res);
+    }
 }
 
 const server = http.createServer(receberRequisicao)
