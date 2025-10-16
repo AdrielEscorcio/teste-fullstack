@@ -1,36 +1,32 @@
 const projetos = require("../controllers/projetoController");
+const verificarRotaDinamica = require('../routes/funcoesAuxiliares')
 
 let id = '';
 
 const methods = {
     GET: {
-        '/': projetos.listarProjetos,
-        [id]: projetos.listarProjetoPorId
+        '/projetos': projetos.listarProjetos,
+        '/projetos/:id': projetos.listarProjetoPorId
     },
     POST: {
-        '/': projetos.criarProjeto
+        '/projetos': projetos.criarProjeto
     },
     PUT: {
-        [id]: projetos.atualizarProjeto
+        '/projetos/:id': projetos.atualizarProjeto
     },
     DELETE: {
-        [id]: projetos.deletarProjeto
+        '/projetos/:id': projetos.deletarProjeto
     },
     DEFAULT: projetos.metodoNaoConhecido
 }
 
 const route = (req, res) => {
     const {method, url} = req;
-    let finalDaUrl = ''
 
-    if(url === '/projetos'){
-        finalDaUrl = '/'
-    }
-
-    if(methods[method] && methods[method][finalDaUrl]){
-        return methods[method][finalDaUrl](req, res);
+    if(methods[method] && methods[method][url]){
+        return methods[method][url](req, res);
     } else {
-        methods.DEFAULT(req, res);
+        return verificarRotaDinamica(methods, req, res)
     }
 
 

@@ -1,37 +1,35 @@
 const colaboradores = require("../controllers/colaboradorController");
+const verificarRotaDinamica = require('../routes/funcoesAuxiliares')
 
 let id = '';
 
 const methods = {
     GET: {
-        '/': colaboradores.listarColaboradores,
-        [id]: colaboradores.listarColaboradorPorId
+        '/colaboradores': colaboradores.listarColaboradores,
+        '/colaboradores/:id': colaboradores.listarColaboradorPorId
     },
     POST: {
-        '/': colaboradores.criarColaborador
+        '/colaboradores': colaboradores.criarColaborador
     },
     PUT: {
-        [id]: colaboradores.atualizarColaborador
+        '/colaboradores/:id': colaboradores.atualizarColaborador
     },
     DELETE: {
-        [id]: colaboradores.deletarColaborador
+        '/colaboradores/:id': colaboradores.deletarColaborador
     },
     DEFAULT: colaboradores.metodoNaoConhecido
 }
 
 const route = (req, res) => {
     const {method, url} = req;
-    let finalDaUrl = ''
-
-    if(url === '/colaboradores'){
-        finalDaUrl = '/'
-    }
-
-    if(methods[method] && methods[method][finalDaUrl]){
-        return methods[method][finalDaUrl](req, res);
+    
+    if(methods[method] && methods[method][url]){
+        return methods[method][url](req, res);
     } else {
-        methods.DEFAULT(req, res);
+       return verificarRotaDinamica(methods, req, res)
     }
+
+    
 
 
 }
