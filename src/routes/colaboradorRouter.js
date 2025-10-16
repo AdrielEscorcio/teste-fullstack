@@ -16,10 +16,7 @@ const methods = {
     DELETE: {
         [id]: colaboradores.deletarColaborador
     },
-    DEFAULT: (req, res) => {
-        res.writeHead(200, {'Content-Type': 'application/json'})
-        res.end(JSON.stringify({ message: 'Metodo Não Conhecido'}))
-    }
+    DEFAULT: colaboradores.metodoNaoConhecido
 }
 
 const route = (req, res) => {
