@@ -1,8 +1,20 @@
-const listarColaboradores = require("../controllers/colaboradorController");
+const colaboradores = require("../controllers/colaboradorController");
+
+let id = '';
 
 const methods = {
     GET: {
-        '/': listarColaboradores
+        '/': colaboradores.listarColaboradores,
+        [id]: colaboradores.listarColaboradorPorId
+    },
+    POST: {
+        '/': colaboradores.criarColaborador
+    },
+    PUT: {
+        [id]: colaboradores.atualizarColaborador
+    },
+    DELETE: {
+        [id]: colaboradores.deletarColaborador
     },
     DEFAULT: (req, res) => {
         res.writeHead(200, {'Content-Type': 'application/json'})
