@@ -1,16 +1,8 @@
 const http = require('http')
-const colaborador = require('./routes/colaboradorRouter')
-const projeto = require('./routes/projetoRouter')
+const recursoRouter = require('./routes/recursoRouter')
 
 const receberRequisicao = (req, res) => {
-
-    if(req.url.startsWith('/colaboradores')){
-        return colaborador(req, res);
-    }
-
-    if (req.url.startsWith('/projetos')) {
-        return projeto(req, res);
-    };
+        return recursoRouter(req, res);
 }
 
 const server = http.createServer(receberRequisicao)
