@@ -1,39 +1,37 @@
-const { listarColaboradores, metodoNaoConhecido, listarColaboradorPorId, criarColaborador, atualizarColaborador, deletarColaborador } = require("../controllers/colaboradorController");
-const { listarProjetos, listarProjetoPorId, criarProjeto, atualizarProjeto, deletarProjeto } = require("../controllers/projetoController");
+const { listarRecurso, listarRecursoPorId, criarRecurso, atualizarRecurso, deletarRecurso, listarRecursoPorIDs, listarExtraDeRecurso, deletarRecursoExtra, criarRecursoExtra } = require("../controllers/recursoController");
 const {verificarRotaDinamica, verificarControllerDinamico} = require('../utils/funcoesAuxiliares')
 
 const funcoesController = {
-    colaboradores: { 
-        'listar': listarColaboradores,
-        'listar/:id': listarColaboradorPorId,
-        'criar': criarColaborador,
-        'atualizar/:id': atualizarColaborador,
-        'deletar/:id': deletarColaborador
-    },
-    projetos: {
-        'listar': listarProjetos,
-        'listar/:id': listarProjetoPorId,
-        'criar': criarProjeto,
-        'atualizar/:id': atualizarProjeto,
-        'deletar/:id': deletarProjeto
-    }
+        'listar': listarRecurso,
+        'listar/:id': listarRecursoPorId,
+        'criar': criarRecurso,
+        'atualizar/:id': atualizarRecurso,
+        'deletar/:id': deletarRecurso,
+        'listar/:id/:extra': listarExtraDeRecurso,
+        'listar/:id/:extra/:idExtra': listarRecursoPorIDs,
+        'criar/:id/:extra': criarRecursoExtra,
+        'deletar/:id/:extra/:idExtra': deletarRecursoExtra
 }
 
 const methods = {
     GET: {
         '/:recurso': (req, res) => verificarControllerDinamico(funcoesController, req, res),
-        '/:recurso/:id': (req, res) => verificarControllerDinamico(funcoesController, req, res)
+        '/:recurso/:id': (req, res) => verificarControllerDinamico(funcoesController, req, res),
+        '/:recurso/:id/:extra': (req, res) => verificarControllerDinamico(funcoesController, req, res),
+        '/:recurso/:id/:extra/:idExtra': (req, res) => verificarControllerDinamico(funcoesController, req, res)
+
     },
     POST: {
-        '/:recurso': (req, res) => verificarControllerDinamico(funcoesController, req, res)
+        '/:recurso': (req, res) => verificarControllerDinamico(funcoesController, req, res),
+        '/:recurso/:id/:extra': (req, res) => verificarControllerDinamico(funcoesController, req, res)
     },
     PUT: {
         '/:recurso/:id': (req, res) => verificarControllerDinamico(funcoesController, req, res)
     },
     DELETE: {
-        '/:recurso/:id': (req, res) => verificarControllerDinamico(funcoesController, req, res)
-    },
-    DEFAULT: metodoNaoConhecido
+        '/:recurso/:id': (req, res) => verificarControllerDinamico(funcoesController, req, res),
+        '/:recurso/:id/:extra/:idExtra': (req, res) => verificarControllerDinamico(funcoesController, req, res)
+    }
 }
 
 const route = (req, res) => {
