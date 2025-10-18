@@ -1,5 +1,3 @@
-const { metodoNaoConhecido } = require("../controllers/colaboradorController");
-
 const verificarRotaDinamica = (methods, req, res) => {
     const { method, url } = req;
 
@@ -31,7 +29,6 @@ const verificarRotaDinamica = (methods, req, res) => {
         }
     }
 
-    return metodoNaoConhecido(req, res);
 }
 
 const verificarControllerDinamico = (funcoesController, req, res) =>{
@@ -42,17 +39,30 @@ const verificarControllerDinamico = (funcoesController, req, res) =>{
         DELETE: 'deletar'
     }
 
-    const {recurso, id} = req.params
+    const {recurso, id, extra, idExtra} = req.params
     const {method} = req;
 
-    if(!id){
+     if(!id){
         var acao = acoes[method]
     } else {
         var acao = `${acoes[method]}/:id`
     }
-    if(funcoesController[recurso] && funcoesController[recurso][acao]){
-        return funcoesController[recurso][acao](req, res);
+
+    if(extra){
+        var acao = `${acoes[method]}/:id/:extra`
+    
+        if(idExtra){
+        var acao = `${acoes[method]}/:id/:extra/:idExtra`
+        }
     }
+
+    if(funcoesController[acao]){
+        return funcoesController[acao](req, res);
+    }
+
+    // if(funcoesController[recursoController] && funcoesController[recursoController][acao]){
+    //     return funcoesController[recursoController][acao](req, res);
+    // }
      
 }
 
