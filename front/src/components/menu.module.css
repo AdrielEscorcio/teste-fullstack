@@ -1,0 +1,26 @@
+.component {
+    margin: 0.25rem;
+    margin-top: 6rem;
+    padding: 0.25rem;
+    color: #fff;
+}
+
+.component li {
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 10px;
+   
+} 
+
+.component li:hover {
+    background-color: rgba(85, 88, 92, 0.5);
+   
+}
+
+.component a {
+    color: #fff;
+   
+}
