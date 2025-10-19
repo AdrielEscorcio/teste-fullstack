@@ -11,89 +11,149 @@ function verificarRecursoColaboradorTecnologia(recurso, extra){
 
 }
 
-const listarRecurso = (req, res) => {
+function resSucesso(dados, res){
 
-    const { recurso, extra } = req.params;
-
-    var recursoInserido = recurso;
-
-    const rescursoModel = base(recursoInserido);
-    const resultado = rescursoModel.listar();
-    res.end(JSON.stringify({ resultado }));
-}
-
-const listarRecursoPorId = (req, res) => {
-
-    const { recurso, id } = req.params;
-
-    var recursoInserido = recurso;
-
-    const rescursoModel = base(recursoInserido);
-    const resultado = rescursoModel.listarPorID(id);
     res.writeHead(statusCodeHttp.ok, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({codHttp: statusCodeHttp.ok, resultado }));
+    res.end(JSON.stringify({ dados }));
+
 }
 
-const listarRecursoPorIDs = (req, res) => {
+const listarRecurso = async (req, res) => {
+    try{
+        const { recurso, extra } = req.params;
+
+        const rescursoModel = base(recurso);
+        const resultado = await rescursoModel.listar();
+        
+        return resSucesso(resultado, res)
+    } catch(error) {
+        res.end(JSON.stringify({Mensagem: 'Erro ao listar recurso', error}))
+    }
+    
+}
+
+const listarRecursoPorId =  async(req, res) => {
+
+    try{
+        const { recurso, id } = req.params;
+
+        const rescursoModel = base(recurso);
+        const resultado = await rescursoModel.listarPorID(id);
+        
+        return resSucesso(resultado, res)
+
+    } catch (error){
+        res.end(JSON.stringify({Mensagem: 'Erro ao listar recurso', error}))
+    }
+    
+}
+
+const listarRecursoPorIDs = async (req, res) => {
     const { recurso, id, extra, idExtra } = req.params;
 
     const recursoInserido = verificarRecursoColaboradorTecnologia(recurso, extra)
     
     const rescursoModel = base(recursoInserido);
-    const resultado = rescursoModel.listarPorIDs(recurso, id, extra, idExtra);
-    res.end(JSON.stringify({ resultado }));
+    const resultado = await rescursoModel.listarPorIDs(recurso, id, extra, idExtra);
+    console.log(resultado); 
+    return resSucesso(resultado, res)
 }
 
-const listarExtraDeRecurso = (req, res) => {
-    const { recurso, id, extra } = req.params;
+const listarExtraDeRecurso = async (req, res) => {
+    try {
+        const { recurso, id, extra } = req.params;
 
-    const recursoInserido = verificarRecursoColaboradorTecnologia(recurso, extra)
+        const recursoInserido = verificarRecursoColaboradorTecnologia(recurso, extra)
 
-    const rescursoModel = base(recursoInserido);
-    const resultado = rescursoModel.listarExtraDeRecurso(id, extra, recurso);
-    res.writeHead(statusCodeHttp.ok, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ codHttp: statusCodeHttp.ok, resultado }));
+        const rescursoModel = base(recursoInserido);
+        const resultado = await rescursoModel.listarExtraDeRecurso(id, extra, recurso);
+        return resSucesso(resultado, res)    
+    } catch (error) {
+        res.end(JSON.stringify({Mensagem: 'Erro ao criar recurso', error}))
+        
+    }
+    
 }
 
 const criarRecurso = async (req, res) => {
+    try{
+        const dados = await pegarDadosReq(req);
+        const { recurso } = req.params;
 
-    const dados = await pegarDadosReq(req);
-    const { recurso } = req.params;
+        const rescursoModel = base(recurso);
+        const resultado = await rescursoModel.inserir(dados);
+        
+        return resSucesso(resultado, res)
 
-    const rescursoModel = base(recurso);
-    const resultado = rescursoModel.inserir(dados);
-    res.end(JSON.stringify({ resultado }));
+    } catch (error){
+        console.log(error)
+        res.end(JSON.stringify({message: 'Erro ao criar', error}))
+    }
 }
 
 const criarRecursoExtra = async (req, res) => {
-    const dados = await pegarDadosReq(req)
-    console.log(dados)
-    const { recurso, id, extra } = req.params
+    try {
+        const dados = await pegarDadosReq(req)
+        const { recurso, id, extra } = req.params
 
-    const recursoInserido = verificarRecursoColaboradorTecnologia(recurso, extra)
+        const recursoInserido = verificarRecursoColaboradorTecnologia(recurso, extra)
 
-    const recursoModel = base(recursoInserido)
-    const resultado = recursoModel.criarRecursoExtra(recurso, id, extra, dados)
-    res.writeHead(statusCodeHttp.ok, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ codHttp: statusCodeHttp.ok, resultado }));
+        const recursoModel = base(recursoInserido)
+        const resultado = await recursoModel.criarRecursoExtra(recurso, id, extra, dados)
+        
+        return resSucesso(resultado, res)
+    } catch (error) {
+        console.log(error)
+        res.end(JSON.stringify({Mensagem: 'Erro ao criar recurso', error}))
+    }
 }
 
-const atualizarRecurso = (req, res) => {
-    res.end('Atualizar Recurso Controller');
+const atualizarRecurso = async (req, res) => {
+    try {
+        const dados = await pegarDadosReq(req)
+        const { recurso, id } = req.params
+
+        const recursoModel = base(recurso)
+        recursoModel.atualizar(id, dados)
+        await listarRecursoPorId(req, res)
+        console.log("ta passando")
+
+    } catch (error){
+        res.end(JSON.stringify({Mensagem: 'Erro ao listar recurso', error}))
+    }
+    
 }
 
-const deletarRecurso = (req, res) => {
-    res.end('Deletar Recurso Controller');
+const deletarRecurso = async (req, res) => {
+    try{
+        const { recurso, id } = req.params
+
+        const recursoModel = base(recurso)
+
+        const resultado = await recursoModel.deletar(id)
+
+        return resSucesso(resultado, res)
+
+    } catch (error) {
+        res.end(JSON.stringify({Mensagem: 'Erro ao deletar recurso', error}))
+    }
+    
+
 }
 
-const deletarRecursoExtra = (req,res) => {
-    const {recurso, id, extra, idExtra} = req.params
+const deletarRecursoExtra = async (req,res) => {
+    try {
+        const {recurso, id, extra, idExtra} = req.params
 
-    const recursoInserido = verificarRecursoColaboradorTecnologia(recurso, extra)
-    const recursoModel = base(recursoInserido)
-    const resultado = recursoModel.deletarRecursoExtra(recurso, id, extra, idExtra)
-    res.end(JSON.stringify({ resultado }))
-
+        const recursoInserido = verificarRecursoColaboradorTecnologia(recurso, extra)
+        const recursoModel = base(recursoInserido)
+        const resultado = await recursoModel.deletarRecursoExtra(recurso, id, extra, idExtra)
+        
+        return resSucesso(resultado, res)    
+    } catch (error) {
+        res.end(JSON.stringify({Mensagem: 'Erro ao criar recurso', error}))
+    }
+    
 }
 
 module.exports = { listarRecurso, listarRecursoPorId, listarRecursoPorIDs, listarExtraDeRecurso,
