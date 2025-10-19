@@ -1,0 +1,11 @@
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vw;
+  display: flex;
+  
+}
+
+ul {
+  list-style: none;
+}
