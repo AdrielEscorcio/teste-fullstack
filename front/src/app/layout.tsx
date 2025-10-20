@@ -22,7 +22,7 @@ export default function RootLayout({
               <Menu />
             </nav>
         </header>
-        <main >
+        <main>
           {children}
         </main>
       </body>
