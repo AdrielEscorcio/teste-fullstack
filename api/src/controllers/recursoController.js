@@ -11,10 +11,17 @@ function verificarRecursoColaboradorTecnologia(recurso, extra){
 
 }
 
+function resSucessoVarios(dados, res){
+
+    res.writeHead(statusCodeHttp.ok, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify([...dados]));
+
+}
+
 function resSucesso(dados, res){
 
     res.writeHead(statusCodeHttp.ok, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ dados }));
+    res.end(JSON.stringify(dados));
 
 }
 
@@ -25,7 +32,7 @@ const listarRecurso = async (req, res) => {
         const rescursoModel = base(recurso);
         const resultado = await rescursoModel.listar();
         
-        return resSucesso(resultado, res)
+        return resSucessoVarios(resultado, res)
     } catch(error) {
         res.end(JSON.stringify({Mensagem: 'Erro ao listar recurso', error}))
     }
@@ -55,7 +62,6 @@ const listarRecursoPorIDs = async (req, res) => {
     
     const rescursoModel = base(recursoInserido);
     const resultado = await rescursoModel.listarPorIDs(recurso, id, extra, idExtra);
-    console.log(resultado); 
     return resSucesso(resultado, res)
 }
 
@@ -86,7 +92,6 @@ const criarRecurso = async (req, res) => {
         return resSucesso(resultado, res)
 
     } catch (error){
-        console.log(error)
         res.end(JSON.stringify({message: 'Erro ao criar', error}))
     }
 }
@@ -103,7 +108,6 @@ const criarRecursoExtra = async (req, res) => {
         
         return resSucesso(resultado, res)
     } catch (error) {
-        console.log(error)
         res.end(JSON.stringify({Mensagem: 'Erro ao criar recurso', error}))
     }
 }
@@ -116,7 +120,6 @@ const atualizarRecurso = async (req, res) => {
         const recursoModel = base(recurso)
         recursoModel.atualizar(id, dados)
         await listarRecursoPorId(req, res)
-        console.log("ta passando")
 
     } catch (error){
         res.end(JSON.stringify({Mensagem: 'Erro ao listar recurso', error}))

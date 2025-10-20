@@ -32,21 +32,17 @@ function base (tabela) {
             inserir: async (dados) => {
                 const {valores, chaves, reservado } = definirValoresChaves(acoes.inserir,dados)
                 const sql = `INSERT INTO ${tabela} (${chaves}) VALUES (${reservado})`
-                console.log(valores)
                 await run(sql, [...valores])
                 return dados
             },
             listar: async () => {
                 const sql = `SELECT * FROM ${tabela}`;
-                console.log(sql);
                 const res = await all(sql)
-                console.log(res)
                 return res; 
             },
             listarPorID: async (id) => {
                 const sql = `SELECT * FROM ${tabela} where id = ?`;
                 const res = await get(sql,[id]);
-                console.log(res)
                 return res;
             },
             atualizar: async (id, dados) => {
@@ -61,6 +57,7 @@ function base (tabela) {
             listarPorIDs: async (recurso, id, extra, idExtra) => {
                 const sql = `SELECT 1 FROM ${tabela} WHERE ${recurso}_id = ? AND ${extra}_id = ?;`;
                 const res = await get(sql, [id, idExtra]);
+                res.teste = "2"
                 console.log(res)
                 return res;
             },
@@ -76,7 +73,7 @@ function base (tabela) {
             criarRecursoExtra: async (recurso, id, extra, dados) => {
                 const {valores} = definirValoresChaves(acoes.inserir, dados)
                 const sql = `INSERT INTO ${tabela} (${recurso}_id, ${extra}_id) VALUES (?, ?);`
-                await run(sql, [id, ...valores]) 
+                await run(sql, [id, ...valores])
             }
         }
 
